@@ -1,8 +1,7 @@
 package com.example.tracker
 
 import android.os.Bundle
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -28,8 +27,9 @@ class MainActivity : ComponentActivity() {
             // Use minimal theme with no animations
             TrackerTheme(dynamicColor = false) {
                 // Force disable any remaining animations
-                LocalView.current.apply {
-                    layoutAnimation = null
+                val view = LocalView.current
+                if (view.parent is ViewGroup) {
+                    (view.parent as ViewGroup).layoutAnimation = null
                 }
                 
                 // Direct navigation with no containers
