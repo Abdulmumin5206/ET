@@ -112,7 +112,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.6.3")
     implementation("androidx.compose.material3:material3:1.2.0")
     
-    // Minimal Navigation
+    // Navigation dependencies
     implementation("androidx.navigation:navigation-compose:2.7.7")
     
     // Minimal Icons - only core icons

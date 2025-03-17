@@ -47,7 +47,13 @@ fun BottomNavBar(
                         // Direct navigation with no animations
                         navController.navigate(item.route) {
                             // Clear back stack for instant navigation
-                            popUpTo(0) { inclusive = true }
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = false
+                            }
+                            // Avoid multiple copies of the same destination
+                            launchSingleTop = true
+                            // Don't restore state to avoid animations
+                            restoreState = false
                         }
                     }
                 }
