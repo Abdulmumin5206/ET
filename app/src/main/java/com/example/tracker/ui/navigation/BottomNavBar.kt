@@ -12,76 +12,53 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 /**
- * Data class representing a bottom navigation item
- */
-data class BottomNavItem(
-    val route: String,
-    val icon: ImageVector,
-    val label: String
-)
-
-/**
- * Bottom navigation bar component optimized for performance
- * 
- * @param navController Navigation controller to handle navigation between screens
- * @param modifier Optional modifier for customizing the appearance
+ * Ultra-lightweight bottom navigation bar
+ * No animations, instant page transitions
  */
 @Composable
 fun BottomNavBar(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    // Using remember to avoid recreating the items list on each recomposition
+    // Pre-compute navigation items to avoid recreations
     val items = remember {
         listOf(
-            BottomNavItem(
-                route = NavDestinations.Home.route,
-                icon = Icons.Default.Home,
-                label = "Home"
-            ),
-            BottomNavItem(
-                route = NavDestinations.Statistics.route,
-                icon = Icons.Default.Info,
-                label = "Statistics"
-            ),
-            BottomNavItem(
-                route = NavDestinations.Downloads.route,
-                icon = Icons.Default.List,
-                label = "Downloads"
-            ),
-            BottomNavItem(
-                route = NavDestinations.Settings.route,
-                icon = Icons.Default.Settings,
-                label = "Settings"
-            )
+            NavItem(NavDestinations.Home.route, Icons.Default.Home, "Home"),
+            NavItem(NavDestinations.Statistics.route, Icons.Default.Info, "Statistics"),
+            NavItem(NavDestinations.Downloads.route, Icons.Default.List, "Downloads"),
+            NavItem(NavDestinations.Settings.route, Icons.Default.Settings, "Settings")
         )
     }
     
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     
-    NavigationBar(
-        modifier = modifier
-    ) {
+    NavigationBar(modifier = modifier) {
         items.forEach { item ->
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = item.label) },
+                icon = { Icon(item.icon, contentDescription = null) },
                 label = { Text(item.label) },
                 selected = currentRoute == item.route,
                 onClick = {
                     if (currentRoute != item.route) {
-                        // Simplified navigation without animation options
+                        // Direct navigation with no animations
                         navController.navigate(item.route) {
-                            popUpTo(NavDestinations.Home.route)
-                            launchSingleTop = true
+                            // Clear back stack for instant navigation
+                            popUpTo(0) { inclusive = true }
                         }
                     }
                 }
             )
         }
     }
-} 
+}
+
+// Simplified data class to reduce memory usage
+private data class NavItem(
+    val route: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val label: String
+) 

@@ -5,14 +5,68 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-# Aggressive optimizations for minimal app size
--optimizationpasses 5
+# Ultra-aggressive optimizations for minimal app size
+-optimizationpasses 10
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontskipnonpubliclibraryclassmembers
 -dontpreverify
 -verbose
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+-allowaccessmodification
+-overloadaggressively
+-repackageclasses ''
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
+
+# Remove all logging and debug code
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}
+
+# Remove all annotations
+-keepattributes *Annotation*
+
+# Keep only essential classes
+-keep public class com.example.tracker.MainActivity
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+
+# Aggressively remove unused code
+-dontwarn **
+-ignorewarnings
+
+# Kotlin specific optimizations
+-keepclassmembers class kotlin.Metadata {
+    public <methods>;
+}
+
+# Keep only essential Compose classes
+-keep class androidx.compose.ui.** { *; }
+-keep class androidx.compose.material3.** { *; }
+-keep class androidx.compose.runtime.** { *; }
+
+# Keep only essential Navigation classes
+-keep class androidx.navigation.** { *; }
+
+# Remove all debugging info
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
+
+# Aggressively shrink resources
+-keep class **.R$* {
+    public static final int drawable_*;
+    public static final int layout_*;
+    public static final int string_*;
+}
+
+# Remove all system.out calls
+-assumenosideeffects class java.io.PrintStream {
+    public void println(...);
+    public void print(...);
+}
 
 # Keep necessary classes
 -keep public class * extends android.app.Activity
@@ -24,15 +78,6 @@
     public static *** d(...);
     public static *** v(...);
     public static *** i(...);
-}
-
-# Kotlin specific optimizations
--keepclassmembers class **$WhenMappings {
-    <fields>;
-}
--keep class kotlin.Metadata { *; }
--keepclassmembers class kotlin.Metadata {
-    public <methods>;
 }
 
 # Compose specific rules

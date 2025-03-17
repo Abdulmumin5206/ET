@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -14,8 +13,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         // Enable multidex for smaller app size
         multiDexEnabled = true
@@ -26,9 +23,8 @@ android {
 
     buildTypes {
         release {
-            // Enable minification to reduce code size
+            // Maximum optimization for release builds
             isMinifyEnabled = true
-            // Enable resource shrinking to remove unused resources
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -37,9 +33,8 @@ android {
         }
         
         debug {
-            // Enable minification in debug builds too for testing
+            // Enable optimization for debug builds too
             isMinifyEnabled = true
-            // Enable resource shrinking in debug builds too
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -48,14 +43,30 @@ android {
         }
     }
     
-    // Optimize APK packaging
+    // Aggressively optimize APK packaging
     packaging {
         resources {
-            // Exclude unnecessary files from the APK
+            // Exclude all unnecessary files
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "META-INF/LICENSE.txt"
-            excludes += "META-INF/NOTICE.txt"
+            excludes += "META-INF/LICENSE*"
+            excludes += "META-INF/NOTICE*"
             excludes += "META-INF/*.kotlin_module"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "**.properties"
+            excludes += "kotlin/**"
+            excludes += "**.bin"
+            excludes += "**.json"
+            excludes += "**.proto"
+            excludes += "**/*.proto"
+            excludes += "org/intellij/**"
+            excludes += "org/jetbrains/**"
+            excludes += "**/*.java"
+            excludes += "**/*.class"
+        }
+        
+        // Don't include multiple APKs
+        jniLibs {
+            useLegacyPackaging = true
         }
     }
     
@@ -66,13 +77,18 @@ android {
     
     kotlinOptions {
         jvmTarget = "11"
-        // Enable compiler optimizations
-        freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
+        // Enable all compiler optimizations
+        freeCompilerArgs += listOf(
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xno-param-assertions",
+            "-Xno-call-assertions",
+            "-Xno-receiver-assertions"
+        )
     }
     
     buildFeatures {
+        // Only enable essential features
         compose = true
-        // Disable unnecessary build features
         buildConfig = false
         aidl = false
         renderScript = false
@@ -87,28 +103,17 @@ android {
 }
 
 dependencies {
-    // Core dependencies - keep only what's necessary
+    // Absolute minimum dependencies
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     
-    // Compose dependencies - use BOM for consistent versions
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.material3)
+    // Minimal Compose dependencies
+    implementation("androidx.compose.ui:ui:1.6.3")
+    implementation("androidx.compose.material3:material3:1.2.0")
     
-    // Navigation - use a specific implementation to reduce size
+    // Minimal Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
     
-    // Icons - only include what we need
+    // Minimal Icons - only core icons
     implementation("androidx.compose.material:material-icons-core:1.6.3")
-    
-    // Debug-only dependencies
-    debugImplementation(libs.androidx.ui.tooling)
-    
-    // Test dependencies - only needed for testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }

@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,14 +15,20 @@ import com.example.tracker.ui.screens.statistics.StatisticsScreen
 
 /**
  * Main navigation component for the app
- * Sets up the navigation host and bottom navigation bar
- * Configured for instant page transitions without animations
+ * Zero animations, instant page transitions
  */
 @Composable
 fun AppNavigation() {
-    val navController = rememberNavController().apply {
-        // Disable animations for instant page transitions
-        disableAnimations()
+    val navController = rememberNavController()
+    
+    // Disable all animations at the system level
+    navController.navigatorProvider.navigators.forEach { navigator ->
+        if (navigator is androidx.navigation.fragment.FragmentNavigator) {
+            navigator.javaClass.getDeclaredField("mAnimatorNavigatorFactory").apply {
+                isAccessible = true
+                set(navigator, null)
+            }
+        }
     }
     
     Scaffold(
@@ -35,54 +41,18 @@ fun AppNavigation() {
             startDestination = NavDestinations.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(
-                route = NavDestinations.Home.route,
-                enterTransition = { null },
-                exitTransition = { null },
-                popEnterTransition = { null },
-                popExitTransition = { null }
-            ) {
+            composable(route = NavDestinations.Home.route) {
                 HomeScreen()
             }
-            composable(
-                route = NavDestinations.Statistics.route,
-                enterTransition = { null },
-                exitTransition = { null },
-                popEnterTransition = { null },
-                popExitTransition = { null }
-            ) {
+            composable(route = NavDestinations.Statistics.route) {
                 StatisticsScreen()
             }
-            composable(
-                route = NavDestinations.Downloads.route,
-                enterTransition = { null },
-                exitTransition = { null },
-                popEnterTransition = { null },
-                popExitTransition = { null }
-            ) {
+            composable(route = NavDestinations.Downloads.route) {
                 DownloadsScreen()
             }
-            composable(
-                route = NavDestinations.Settings.route,
-                enterTransition = { null },
-                exitTransition = { null },
-                popEnterTransition = { null },
-                popExitTransition = { null }
-            ) {
+            composable(route = NavDestinations.Settings.route) {
                 SettingsScreen()
             }
-        }
-    }
-}
-
-/**
- * Extension function to disable animations in NavController
- */
-private fun NavHostController.disableAnimations() {
-    addOnDestinationChangedListener { _, _, _ ->
-        // This ensures no animations are played when destinations change
-        currentBackStack.value.forEach { entry ->
-            entry.arguments?.putBoolean("android:anim", false)
         }
     }
 } 
