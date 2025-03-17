@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Brush
+import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
@@ -50,7 +50,7 @@ fun SettingsScreen(navController: NavController) {
                     .padding(16.dp)
             ) {
                 NoAnimIconWithText(
-                    icon = Icons.Default.Brush,
+                    icon = Icons.Default.ColorLens,
                     text = "Appearance",
                     fontSize = 18.sp
                 )
