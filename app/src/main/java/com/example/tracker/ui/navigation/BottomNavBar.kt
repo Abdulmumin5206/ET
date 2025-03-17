@@ -8,10 +8,12 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -36,11 +38,23 @@ fun BottomNavBar(
     
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     
-    NavigationBar(modifier = modifier) {
+    NavigationBar(
+        modifier = modifier,
+        tonalElevation = 0.dp // Remove elevation shadow animation
+    ) {
         items.forEach { item ->
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = null) },
-                label = { Text(item.label) },
+                icon = { 
+                    Icon(
+                        imageVector = item.icon, 
+                        contentDescription = null
+                    ) 
+                },
+                label = { 
+                    Text(
+                        text = item.label
+                    ) 
+                },
                 selected = currentRoute == item.route,
                 onClick = {
                     if (currentRoute != item.route) {
@@ -56,7 +70,12 @@ fun BottomNavBar(
                             restoreState = false
                         }
                     }
-                }
+                },
+                // Disable animations
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = NavigationBarItemDefaults.colors().indicatorColor
+                ),
+                alwaysShowLabel = true // Prevent label animation
             )
         }
     }

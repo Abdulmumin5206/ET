@@ -9,6 +9,10 @@ sealed class NavDestinations(val route: String) {
     object Downloads : NavDestinations("downloads")
     object Settings : NavDestinations("settings")
     
+    // Settings sub-pages
+    object Appearance : NavDestinations("settings/appearance")
+    object Languages : NavDestinations("settings/languages")
+    
     companion object {
         val bottomNavItems = listOf(Home, Statistics, Downloads, Settings)
     }

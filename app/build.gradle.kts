@@ -117,4 +117,7 @@ dependencies {
     
     // Minimal Icons - only core icons
     implementation("androidx.compose.material:material-icons-core:1.6.3")
+    
+    // DataStore for preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }
