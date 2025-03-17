@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -71,10 +72,8 @@ fun BottomNavBar(
                         }
                     }
                 },
-                // Disable animations
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = NavigationBarItemDefaults.colors().indicatorColor
-                ),
+                // Use default colors without animation
+                colors = NavigationBarItemDefaults.colors(),
                 alwaysShowLabel = true // Prevent label animation
             )
         }

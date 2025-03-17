@@ -1,6 +1,5 @@
 package com.example.tracker.ui.screens.settings
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brush
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +16,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.tracker.ui.components.NoAnimIconWithText
+import com.example.tracker.ui.components.NoAnimText
+import com.example.tracker.ui.components.noRippleClickable
 import com.example.tracker.ui.navigation.NavDestinations
 
 /**
@@ -34,7 +33,7 @@ fun SettingsScreen(navController: NavController) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
+            NoAnimText(
                 text = "Settings",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -42,36 +41,48 @@ fun SettingsScreen(navController: NavController) {
             )
             
             // Appearance settings
-            ListItem(
-                headlineContent = { Text("Appearance") },
-                supportingContent = { Text("Change app theme") },
-                leadingContent = { 
-                    Icon(
-                        Icons.Default.Brush,
-                        contentDescription = null
-                    )
-                },
-                modifier = Modifier.clickable {
-                    navController.navigate(NavDestinations.Appearance.route)
-                }
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .noRippleClickable {
+                        navController.navigate(NavDestinations.Appearance.route)
+                    }
+                    .padding(16.dp)
+            ) {
+                NoAnimIconWithText(
+                    icon = Icons.Default.Brush,
+                    text = "Appearance",
+                    fontSize = 18.sp
+                )
+                NoAnimText(
+                    text = "Change app theme",
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(start = 24.dp, top = 4.dp)
+                )
+            }
             
             Divider()
             
             // Language settings
-            ListItem(
-                headlineContent = { Text("Language") },
-                supportingContent = { Text("Change app language") },
-                leadingContent = { 
-                    Icon(
-                        Icons.Default.Language,
-                        contentDescription = null
-                    )
-                },
-                modifier = Modifier.clickable {
-                    navController.navigate(NavDestinations.Languages.route)
-                }
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .noRippleClickable {
+                        navController.navigate(NavDestinations.Languages.route)
+                    }
+                    .padding(16.dp)
+            ) {
+                NoAnimIconWithText(
+                    icon = Icons.Default.Language,
+                    text = "Language",
+                    fontSize = 18.sp
+                )
+                NoAnimText(
+                    text = "Change app language",
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(start = 24.dp, top = 4.dp)
+                )
+            }
             
             Divider()
         }

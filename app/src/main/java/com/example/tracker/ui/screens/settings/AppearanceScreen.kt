@@ -2,7 +2,6 @@ package com.example.tracker.ui.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,10 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.tracker.ui.components.NoAnimIcon
+import com.example.tracker.ui.components.NoAnimText
+import com.example.tracker.ui.components.noRippleClickable
 import com.example.tracker.ui.theme.AppTheme
 import com.example.tracker.ui.theme.DarkBackground
 import com.example.tracker.ui.theme.Green40
@@ -55,14 +54,18 @@ fun AppearanceScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(8.dp)
             ) {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = "Back"
+                Box(
+                    modifier = Modifier.noRippleClickable { navController.popBackStack() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    NoAnimIcon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
                 
-                Text(
+                NoAnimText(
                     text = "Appearance",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
@@ -72,7 +75,7 @@ fun AppearanceScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
             
             // Theme options
-            Text(
+            NoAnimText(
                 text = "Select Theme",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
@@ -126,7 +129,7 @@ private fun ThemeOption(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .noRippleClickable(onClick = onClick)
             .padding(16.dp)
     ) {
         // Theme color preview
@@ -153,7 +156,7 @@ private fun ThemeOption(
         
         Spacer(modifier = Modifier.width(16.dp))
         
-        Text(
+        NoAnimText(
             text = name,
             fontSize = 16.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
